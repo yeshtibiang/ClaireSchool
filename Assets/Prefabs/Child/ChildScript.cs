@@ -50,6 +50,7 @@ public class ChildScript : MonoBehaviour
                 agentChild.isStopped = true;
                 //agentChild.speed = 0;
                 animatorChild.SetBool("run", false);
+                agentChild.transform.rotation = target.rotation;
             }
         }
     }
