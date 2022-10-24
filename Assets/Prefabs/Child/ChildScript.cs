@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,12 +21,29 @@ public class ChildScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        particle = transform.Find("Particle").gameObject;
+        agentChild = GetComponentInChildren<NavMeshAgent>();
+        animatorChild = GetComponentInChildren<Animator>();
+        audioSourcChild = GetComponent<AudioSource>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Player"))
+        {
+            // on détruit la cage
+            audioSourcChild.PlayOneShot(sndExplosion);
+            particle.SetActive(true);
+            Destroy(transform.Find("Cage").gameObject);
+            // desactiver le collider sur le child
+            GetComponent<BoxCollider>().enabled = false;
+        }
     }
 }
