@@ -10,6 +10,7 @@ public class ChildScript : MonoBehaviour
     private GameObject particle;
     private NavMeshAgent agentChild;
     private Animator animatorChild;
+    private bool inCage = true;
     
     // target de l'enfant. 
     [SerializeField] private Transform target;
@@ -31,13 +32,33 @@ public class ChildScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (inCage)
+        {
+            agentChild.SetDestination(player.position);
+            agentChild.speed = 0f;
+        }
+        else
+        {
+            animatorChild.SetBool("run", true);
+            agentChild.SetDestination(target.position);
+            agentChild.speed = 5f;
+            
+            // pour arrêter l'enfant quand il arrive à destination
+            if (agentChild.remainingDistance <= agentChild.stoppingDistance)
+            {
+                // on arrête l'agent
+                agentChild.isStopped = true;
+                //agentChild.speed = 0;
+                animatorChild.SetBool("run", false);
+            }
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.CompareTag("Player"))
         {
+            inCage = false;
             // on détruit la cage
             audioSourcChild.PlayOneShot(sndExplosion);
             particle.SetActive(true);
