@@ -66,6 +66,9 @@ public class ChildScript : MonoBehaviour
             Destroy(transform.Find("Cage").gameObject);
             // desactiver le collider sur le child
             GetComponent<BoxCollider>().enabled = false;
+            
+            // ajouter le sprite dans le slot
+            GameObject.Find("GameManager").GetComponent<UIslot>().insertChildInSlot();
         }
     }
 }
